@@ -168,6 +168,3 @@ preference for deterministic or probabilistic decision-making:
 For each of these, you provide two natural numbers x and y as inputs, and the system will
 return an AI_Choice (either First_Choice, Second_Choice, or No_Choice).
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
