@@ -1,0 +1,85 @@
+(* Import the necessary Coq libraries *)
+Require Import Arith.
+Require Import Lia.
+
+(* 1. Define the AI decision options *)
+Inductive AI_Choice : Type :=
+  | First_Choice
+  | Second_Choice
+  | No_Choice.
+
+(* 2. The AI decision function: we choose based on the values of x and y *)
+Definition AI_decision (x y : nat) : AI_Choice :=
+  if Nat.ltb x y then First_Choice
+  else if Nat.ltb y x then Second_Choice
+  else No_Choice.
+
+(* 3. The lemma that says if x = y, we get No_Choice *)
+Lemma AI_dilemma : forall (x : nat), AI_decision x x = No_Choice.
+Proof.
+  intros x.
+  unfold AI_decision.
+  destruct (Nat.ltb x x) eqn:H1.
+  - apply Nat.ltb_lt in H1. lia.
+  - destruct (Nat.ltb x x) eqn:H2.
+    + apply Nat.ltb_lt in H2. lia.
+    + reflexivity.
+Qed.
+
+(* 4. Add randomness to the decision: with the random_choice variable *)
+Parameter random_choice : AI_Choice.
+
+Definition AI_decision_with_randomness (x y : nat) : AI_Choice :=
+  if x <? y then First_Choice
+  else if y <? x then Second_Choice
+  else random_choice.
+
+(* 5. The lemma that proves that if x = y, the random_choice is selected *)
+Lemma AI_decision_with_randomness_equal : forall (x : nat), AI_decision_with_randomness x x = random_choice.
+Proof.
+  intros x.
+  unfold AI_decision_with_randomness.
+  destruct (x <? x) eqn:H1.
+  - apply Nat.ltb_lt in H1. lia.
+  - destruct (x <? x) eqn:H2.
+    + apply Nat.ltb_lt in H2. lia.
+    + reflexivity.
+Qed.
+
+(* 6. Add bias to the decision: with the bias variable *)
+Definition AI_decision_with_bias (x y : nat) (bias : AI_Choice) : AI_Choice :=
+  if x <? y then First_Choice
+  else if y <? x then Second_Choice
+  else bias.
+
+(* 7. The lemma that proves that if x = y, the bias is selected *)
+Lemma AI_decision_with_bias_equal : forall (x : nat) (bias : AI_Choice), AI_decision_with_bias x x bias = bias.
+Proof.
+  intros x bias.
+  unfold AI_decision_with_bias.
+  destruct (x <? x) eqn:H1.
+  - apply Nat.ltb_lt in H1. lia.
+  - destruct (x <? x) eqn:H2.
+    + apply Nat.ltb_lt in H2. lia.
+    + reflexivity.
+Qed.
+
+(* 8. Add softmax decision: with the softmax variable *)
+Parameter softmax : nat -> nat -> AI_Choice.
+
+Definition AI_decision_with_softmax (x y : nat) : AI_Choice :=
+  if x <? y then First_Choice
+  else if y <? x then Second_Choice
+  else softmax x y.
+
+(* 9. The lemma that proves that if x = y, the softmax decision is selected *)
+Lemma AI_decision_with_softmax_equal : forall (x : nat), AI_decision_with_softmax x x = softmax x x.
+Proof.
+  intros x.
+  unfold AI_decision_with_softmax.
+  destruct (x <? x) eqn:H1.
+  - apply Nat.ltb_lt in H1. lia.
+  - destruct (x <? x) eqn:H2.
+    + apply Nat.ltb_lt in H2. lia.
+    + reflexivity.
+Qed.
